@@ -173,7 +173,7 @@ Example agent session — 9 API calls in a typical workflow:
 | **skills.sh** | `npx skills add checkra1neth/xbird-skill` |
 | **Smithery** | [`@checkra1neth/xbirdmcp`](https://smithery.ai/server/@checkra1neth/xbirdmcp) |
 | **SkillsMP** | [skillsmp.com](https://skillsmp.com/) |
-| **Website** | [xbird.dev](https://xbird.dev) |
+| **Website** | [xbird.dev](https://xb1rd.vercel.app) |
 
 ## License
 
