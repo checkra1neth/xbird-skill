@@ -2,7 +2,7 @@
 
 [![Website](https://img.shields.io/badge/xbird.dev-website-white)](https://xb1rd.vercel.app)
 [![npm](https://img.shields.io/npm/v/@checkra1n/xbird)](https://www.npmjs.com/package/@checkra1n/xbird)
-[![smithery badge](https://smithery.ai/badge/@checkra1neth/xbirdmcp)](https://smithery.ai/server/@checkra1neth/xbirdmcp)
+[![smithery badge](https://smithery.ai/badge/checkra1neth/xbirdmcp)](https://smithery.ai/server/checkra1neth/xbirdmcp)
 [![skills.sh](https://img.shields.io/badge/skills.sh-xbird-blue)](https://skills.sh/checkra1neth/xbird-skill)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -171,7 +171,7 @@ Example agent session — 9 API calls in a typical workflow:
 | **npm** | [`@checkra1n/xbird`](https://www.npmjs.com/package/@checkra1n/xbird) |
 | **Claude Code Plugin** | `/plugin install checkra1neth/xbird-skill` |
 | **skills.sh** | `npx skills add checkra1neth/xbird-skill` |
-| **Smithery** | [`@checkra1neth/xbirdmcp`](https://smithery.ai/server/@checkra1neth/xbirdmcp) |
+| **Smithery** | [`@checkra1neth/xbirdmcp`](https://smithery.ai/server/checkra1neth/xbirdmcp) |
 | **SkillsMP** | [skillsmp.com](https://skillsmp.com/) |
 | **Website** | [xbird.dev](https://xb1rd.vercel.app) |
 
