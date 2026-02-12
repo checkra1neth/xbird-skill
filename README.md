@@ -1,7 +1,7 @@
 # xbird — Twitter/X for AI Agents
 
 [![Website](https://img.shields.io/badge/xbird.dev-website-white)](https://xbird.dev)
-[![npm](https://img.shields.io/npm/v/xbird-mcp)](https://www.npmjs.com/package/xbird-mcp)
+[![npm](https://img.shields.io/npm/v/@checkra1n/xbird)](https://www.npmjs.com/package/@checkra1n/xbird)
 [![smithery badge](https://smithery.ai/badge/@checkra1neth/xbirdmcp)](https://smithery.ai/server/@checkra1neth/xbirdmcp)
 [![skills.sh](https://img.shields.io/badge/skills.sh-xbird-blue)](https://skills.sh/checkra1neth/xbird-skill)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -27,7 +27,7 @@ npx skills add checkra1neth/xbird-skill
 ### MCP Server Only
 
 ```bash
-bunx xbird-mcp
+bunx @checkra1n/xbird
 ```
 
 ## Setup
@@ -51,7 +51,7 @@ Add to `~/.claude.json` (Claude Code) or MCP settings (Cursor/Windsurf):
   "mcpServers": {
     "xbird": {
       "command": "bunx",
-      "args": ["xbird-mcp"],
+      "args": ["@checkra1n/xbird"],
       "env": {
         "XBIRD_AUTH_TOKEN": "your_auth_token",
         "XBIRD_CT0": "your_ct0",
@@ -67,7 +67,7 @@ Add to `~/.claude.json` (Claude Code) or MCP settings (Cursor/Windsurf):
 ```
 AI Agent (Claude Code / Cursor / Windsurf)
   |  MCP stdio
-xbird-mcp (local process)
+@checkra1n/xbird (local process)
   |-- Pay x402 --> xbird server (payment gateway)
   '-- Execute --> Twitter API (your local IP)
 ```
@@ -158,17 +158,17 @@ Example agent session — 9 API calls in a typical workflow:
 | Client | Install Method |
 |--------|---------------|
 | **Claude Code** | `/plugin install checkra1neth/xbird-skill` |
-| **Claude Desktop** | `npx xbird-mcp` as MCP command |
-| **Cursor** | `npx xbird-mcp` as MCP command |
-| **Windsurf** | `npx xbird-mcp` as MCP command |
+| **Claude Desktop** | `npx @checkra1n/xbird` as MCP command |
+| **Cursor** | `npx @checkra1n/xbird` as MCP command |
+| **Windsurf** | `npx @checkra1n/xbird` as MCP command |
 | **Smithery** | `npx -y @smithery/cli install @checkra1neth/xbirdmcp` |
-| **Any MCP client** | `bunx xbird-mcp` / `npx xbird-mcp` |
+| **Any MCP client** | `bunx @checkra1n/xbird` / `npx @checkra1n/xbird` |
 
 ## Distribution
 
 | Platform | Install |
 |----------|---------|
-| **npm** | [`xbird-mcp`](https://www.npmjs.com/package/xbird-mcp) |
+| **npm** | [`@checkra1n/xbird`](https://www.npmjs.com/package/@checkra1n/xbird) |
 | **Claude Code Plugin** | `/plugin install checkra1neth/xbird-skill` |
 | **skills.sh** | `npx skills add checkra1neth/xbird-skill` |
 | **Smithery** | [`@checkra1neth/xbirdmcp`](https://smithery.ai/server/@checkra1neth/xbirdmcp) |

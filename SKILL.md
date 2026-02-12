@@ -16,7 +16,7 @@ The xbird MCP server must be configured. Add to `~/.claude.json`:
   "mcpServers": {
     "xbird": {
       "command": "bunx",
-      "args": ["xbird-mcp"],
+      "args": ["@checkra1n/xbird"],
       "env": {
         "XBIRD_AUTH_TOKEN": "your_auth_token",
         "XBIRD_CT0": "your_ct0",
