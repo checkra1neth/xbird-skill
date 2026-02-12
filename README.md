@@ -1,6 +1,6 @@
 # xbird — Twitter/X for AI Agents
 
-[![Website](https://img.shields.io/badge/xbird.dev-website-white)](https://xbird.dev)
+[![Website](https://img.shields.io/badge/xbird.dev-website-white)](https://xb1rd.vercel.app)
 [![npm](https://img.shields.io/npm/v/@checkra1n/xbird)](https://www.npmjs.com/package/@checkra1n/xbird)
 [![smithery badge](https://smithery.ai/badge/@checkra1neth/xbirdmcp)](https://smithery.ai/server/@checkra1neth/xbirdmcp)
 [![skills.sh](https://img.shields.io/badge/skills.sh-xbird-blue)](https://skills.sh/checkra1neth/xbird-skill)
