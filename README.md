@@ -1,12 +1,14 @@
 # xbird — Twitter/X for AI Agents
 
+[![Website](https://img.shields.io/badge/xbird.dev-website-white)](https://xbird.dev)
 [![npm](https://img.shields.io/npm/v/xbird-mcp)](https://www.npmjs.com/package/xbird-mcp)
+[![smithery badge](https://smithery.ai/badge/@checkra1neth/xbirdmcp)](https://smithery.ai/server/@checkra1neth/xbirdmcp)
 [![skills.sh](https://img.shields.io/badge/skills.sh-xbird-blue)](https://skills.sh/checkra1neth/xbird-skill)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Agent skill + MCP server that gives AI agents **30 Twitter/X tools** — reading, searching, posting, engagement, media upload — with per-call x402 micropayments on Base.
+Agent skill + MCP server that gives AI agents **30 Twitter/X tools** — reading, searching, posting, engagement, media upload — with per-call [x402](https://www.x402.org/) micropayments on Base.
 
-Runs locally on your machine using your Twitter cookies, so requests come from a residential IP (no datacenter blocks).
+No Twitter developer account. No API keys. No OAuth. Runs locally on your machine from a residential IP.
 
 ## Quick Install
 
@@ -72,6 +74,15 @@ xbird-mcp (local process)
 
 The xbird server only verifies payments. All Twitter API calls happen locally from your machine.
 
+## Why xbird?
+
+- **No API keys** — no Twitter developer account, no OAuth tokens, no rate limit management
+- **3x cheaper than X API** — flat per-call pricing vs per-resource charges (see [comparison](#pricing-comparison))
+- **Residential IP** — runs locally on your machine, no datacenter blocks
+- **30 tools** — full coverage: read, search, post, engage, upload media
+- **Zero config** — one install command, your agent handles payments automatically via x402
+- **Works everywhere** — Claude Code, Cursor, Windsurf, and 35+ MCP-compatible agents
+
 ## Tools (30)
 
 ### Read — $0.001/call
@@ -125,19 +136,44 @@ The xbird server only verifies payments. All Twitter API calls happen locally fr
 |------|-------------|
 | `upload_media` | Upload image/video for tweets |
 
-## Payments
+## Pricing Comparison
 
-Every tool call makes a micropayment via [x402](https://www.x402.org/) on Base (L2). Prices range from $0.001 (reading) to $0.05 (media upload).
+Example agent session — 9 API calls in a typical workflow:
+
+| Call | xbird | X API |
+|------|-------|-------|
+| `search_tweets` | $0.005 | $0.100 |
+| `get_tweet` ×3 | $0.003 | $0.015 |
+| `get_user` | $0.001 | $0.010 |
+| `get_replies` | $0.001 | $0.100 |
+| `post_tweet` | $0.010 | $0.010 |
+| `like_tweet` | $0.010 | $0.015 |
+| `upload_media` | $0.050 | $0.010 |
+| **Total** | **$0.080** | **$0.260** |
+
+**3.2x cheaper.** X API charges per resource fetched — a search returning 20 tweets costs 20x the per-tweet price. xbird charges a flat fee per call.
+
+## Compatibility
+
+| Client | Install Method |
+|--------|---------------|
+| **Claude Code** | `/plugin install checkra1neth/xbird-skill` |
+| **Claude Desktop** | `npx xbird-mcp` as MCP command |
+| **Cursor** | `npx xbird-mcp` as MCP command |
+| **Windsurf** | `npx xbird-mcp` as MCP command |
+| **Smithery** | `npx -y @smithery/cli install @checkra1neth/xbirdmcp` |
+| **Any MCP client** | `bunx xbird-mcp` / `npx xbird-mcp` |
 
 ## Distribution
 
 | Platform | Install |
 |----------|---------|
-| **npm** | `bunx xbird-mcp` / `npx xbird-mcp` |
+| **npm** | [`xbird-mcp`](https://www.npmjs.com/package/xbird-mcp) |
 | **Claude Code Plugin** | `/plugin install checkra1neth/xbird-skill` |
-| **skills.sh** | `npx skills add checkra1neth/xbird-skill` |
+| **skills.sh** | [`checkra1neth/xbird-skill`](https://skills.sh/checkra1neth/xbird-skill) |
+| **Smithery** | [`@checkra1neth/xbirdmcp`](https://smithery.ai/server/@checkra1neth/xbirdmcp) |
 | **SkillsMP** | [skillsmp.com](https://skillsmp.com/) |
-| **Smithery** | [smithery.ai](https://smithery.ai/) |
+| **Website** | [xbird.dev](https://xbird.dev) |
 
 ## License
 
