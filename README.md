@@ -7,9 +7,30 @@
 [![skills.sh](https://img.shields.io/badge/skills.sh-xbird-blue)](https://skills.sh/checkra1neth/xbird-skill)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Agent skill + MCP server that gives AI agents **30 Twitter/X tools** — reading, searching, posting, engagement, media upload — with per-call [x402](https://www.x402.org/) micropayments on Base.
+Agent skills that give AI agents **34 Twitter/X tools** — reading, searching, posting, engagement, media upload — across 3 integration protocols.
 
-No Twitter developer account. No API keys. No OAuth. Runs locally on your machine from a residential IP.
+No Twitter developer account. No API keys. No OAuth.
+
+## Skills
+
+| Skill | Protocol | Best For |
+|-------|----------|----------|
+| [**xbird**](./skills/xbird/) | MCP (stdio) | Claude Code, Cursor, Windsurf — local MCP tools |
+| [**xbird-rest-api**](./skills/xbird-rest-api/) | REST + x402 | Backend services, autonomous agents, any HTTP client |
+| [**xbird-acp**](./skills/xbird-acp/) | ACP (Virtuals) | Agent-to-agent commerce on Virtuals Protocol marketplace |
+
+### Which skill to use?
+
+```
+Running in Claude Code / Cursor / Windsurf?
+  → xbird (MCP)
+
+Building a backend service or autonomous agent?
+  → xbird-rest-api (x402 micropayments, USDC on Base)
+
+Operating on Virtuals Protocol marketplace?
+  → xbird-acp (E2E encrypted credentials, ECDH + AES-256-GCM)
+```
 
 ## Quick Install
 
@@ -65,6 +86,8 @@ Add to `~/.claude.json` (Claude Code) or MCP settings (Cursor/Windsurf):
 
 ## How It Works
 
+### MCP (Local)
+
 ```
 AI Agent (Claude Code / Cursor / Windsurf)
   |  MCP stdio
@@ -75,71 +98,42 @@ AI Agent (Claude Code / Cursor / Windsurf)
 
 The xbird server only verifies payments. All Twitter API calls happen locally from your machine.
 
-## Why xbird?
+### REST API (x402)
 
-- **No API keys** — no Twitter developer account, no OAuth tokens, no rate limit management
-- **3x cheaper than X API** — flat per-call pricing vs per-resource charges (see [comparison](#pricing-comparison))
-- **Residential IP** — runs locally on your machine, no datacenter blocks
-- **30 tools** — full coverage: read, search, post, engage, upload media
-- **Zero config** — one install command, your agent handles payments automatically via x402
-- **Works everywhere** — Claude Code, Cursor, Windsurf, and 35+ MCP-compatible agents
+```
+Your Backend / Agent
+  |-- GET /api/search?q=bitcoin  -->  xbird server
+  |<-- 402 Payment Required      <--  (challenge)
+  |-- x-payment header (signed)  -->  (auto via @x402/fetch)
+  |<-- 200 { data, cursor }      <--  (result)
+```
 
-## Tools (30)
+Pay-per-request via x402 micropayments (USDC on Base). Credentials sent per-request or registered with AES-256-GCM encryption at rest.
 
-### Read — $0.001/call
+### ACP (Virtuals Protocol)
 
-| Tool | Description |
-|------|-------------|
-| `get_tweet` | Get a tweet by ID |
-| `get_thread` | Get a tweet thread (conversation chain) |
-| `get_replies` | Get replies to a tweet |
-| `get_user` | Get user profile by handle |
-| `get_user_about` | Get detailed user info |
-| `get_current_user` | Get authenticated user's profile |
-| `get_home_timeline` | Get home timeline |
-| `get_news` | Get trending topics |
-| `get_lists` | Get owned lists |
-| `get_list_timeline` | Get tweets from a list |
+```
+Buyer Agent
+  |-- ECDH key exchange  -->  xbird TEE (attestation)
+  |-- Encrypted credentials + job  -->  Virtuals relay (claw-api)
+  |-- Job lifecycle: REQUEST → NEGOTIATION → TRANSACTION → COMPLETED
+  |<-- Deliverable with results
+```
 
-### Search — $0.005/call
+End-to-end encrypted credentials (ECDH P-256 + AES-256-GCM). The Virtuals relay transports only opaque ciphertext.
 
-| Tool | Description |
-|------|-------------|
-| `search_tweets` | Search tweets by query |
-| `get_mentions` | Get mentions for a user |
+## Pricing
 
-### Bulk — $0.01/call
+| Tier | Price | Examples |
+|------|-------|---------|
+| Read | $0.001 | `get_tweet`, `get_user`, `get_home_timeline` |
+| Search | $0.005 | `search_tweets`, `get_mentions` |
+| Bulk/Write | $0.01 | `get_user_tweets`, `post_tweet`, `like_tweet` |
+| Media | $0.05 | `upload_media` |
 
-| Tool | Description |
-|------|-------------|
-| `get_user_tweets` | Get tweets posted by a user |
-| `get_followers` | Get a user's followers |
-| `get_following` | Get users a user follows |
-| `get_likes` | Get liked tweets |
-| `get_bookmarks` | Get bookmarked tweets |
-| `get_list_memberships` | Get list memberships |
+### Comparison with X API
 
-### Write — $0.01/call
-
-| Tool | Description |
-|------|-------------|
-| `post_tweet` | Post a new tweet |
-| `reply_to_tweet` | Reply to a tweet |
-| `post_thread` | Post a thread |
-| `like_tweet` / `unlike_tweet` | Like / unlike |
-| `retweet` / `unretweet` | Retweet / undo |
-| `bookmark_tweet` / `unbookmark_tweet` | Bookmark / undo |
-| `follow_user` / `unfollow_user` | Follow / unfollow |
-
-### Media — $0.05/call
-
-| Tool | Description |
-|------|-------------|
-| `upload_media` | Upload image/video for tweets |
-
-## Pricing Comparison
-
-Example agent session — 9 API calls in a typical workflow:
+Example agent session — 9 API calls:
 
 | Call | xbird | X API |
 |------|-------|-------|
@@ -153,6 +147,33 @@ Example agent session — 9 API calls in a typical workflow:
 | **Total** | **$0.080** | **$0.260** |
 
 **3.2x cheaper.** X API charges per resource fetched — a search returning 20 tweets costs 20x the per-tweet price. xbird charges a flat fee per call.
+
+## Security
+
+| Protocol | Credential Protection |
+|----------|----------------------|
+| **MCP** | Local environment variables, never leave your machine |
+| **REST x402** | Per-request headers or AES-256-GCM encrypted at rest |
+| **ACP** | ECDH P-256 + AES-256-GCM end-to-end encryption (relay-blind) |
+
+## Skill Structure
+
+Each skill follows [Anthropic's best practices](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/tutorials#create-custom-slash-commands) — concise SKILL.md (<500 words) with heavy reference in separate files.
+
+```
+skills/
+├── xbird/                   # MCP (local tools)
+│   ├── SKILL.md             # Setup + workflows + common mistakes
+│   └── tools.md             # 34 MCP tools reference
+├── xbird-rest-api/          # REST API + x402 micropayments
+│   ├── SKILL.md             # Setup + auth + example + common mistakes
+│   ├── endpoints.md         # Full endpoint tables with pricing
+│   └── x402-flow.md         # Payment flow + encrypted credentials
+└── xbird-acp/               # ACP (Virtuals marketplace)
+    ├── SKILL.md             # Setup + example + common mistakes
+    ├── encryption-flow.md   # ECDH P-256 + AES-256-GCM details
+    └── polling.md           # Job lifecycle + polling strategies
+```
 
 ## Compatibility
 
