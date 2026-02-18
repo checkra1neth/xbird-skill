@@ -1,11 +1,14 @@
 ---
 name: xbird
 description: "Use when the user asks to tweet, post threads, read tweets, search Twitter/X, check mentions, manage engagement (like/retweet/bookmark), update profile (bio, avatar, banner), upload media, or interact with Twitter accounts. Triggers: twitter, tweet, post, thread, timeline, mentions, followers, following, likes, retweet, bookmark, profile picture, bio."
+argument-hint: "[action or query]"
 ---
 
 # xbird — Twitter/X for AI Agents
 
-34 MCP tools for Twitter/X with x402 micropayments. Runs locally from residential IP.
+35 MCP tools for Twitter/X with x402 micropayments. Runs locally from residential IP.
+
+**Zero config** — auto-detects your browser session and generates a wallet. No API keys, no developer account.
 
 ## When to Use
 
@@ -21,10 +24,7 @@ description: "Use when the user asks to tweet, post threads, read tweets, search
 claude mcp add xbird -- npx @checkra1n/xbird
 ```
 
-Required environment variables (set in `~/.claude/settings.json` or shell):
-- `XBIRD_AUTH_TOKEN` — from x.com cookies (DevTools > Application > Cookies > `auth_token`)
-- `XBIRD_CT0` — from x.com cookies (DevTools > Application > Cookies > `ct0`)
-- `XBIRD_PRIVATE_KEY` — wallet private key for x402 payments (optional, needed for paid tier)
+That's it. xbird auto-detects your Twitter session from Chrome, Firefox, Edge, or Safari. A payment wallet is generated automatically on first run.
 
 Full tool list: see `tools.md`.
 
@@ -55,4 +55,4 @@ Pricing:    Read $0.001 | Search $0.005 | Bulk/Write $0.01 | Media $0.05
 | Posting thread with 1 tweet | `post_thread` requires minimum 2 tweets. Use `post_tweet` for single tweet. |
 | Media not attached | Upload returns `mediaId` — must pass it in `mediaIds` array to `post_tweet`. |
 | Rate limit error | Twitter rate limit. Wait 1-2 minutes, retry. |
-| Missing env vars | Both `XBIRD_AUTH_TOKEN` and `XBIRD_CT0` required. `XBIRD_PRIVATE_KEY` optional for free tier. |
+| Cookies not detected | Login to x.com in any browser. xbird auto-detects Chrome, Firefox, Edge, Safari. |

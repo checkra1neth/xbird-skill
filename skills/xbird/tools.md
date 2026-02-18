@@ -1,6 +1,6 @@
 # xbird MCP — Tools Reference
 
-34 MCP tools for Twitter/X. All tools accept standard MCP parameters.
+35 MCP tools for Twitter/X. All tools accept standard MCP parameters.
 
 ## Read — $0.001/call
 
@@ -8,6 +8,7 @@
 |------|-------------|
 | `get_tweet` | Get tweet by ID |
 | `get_thread` | Get full thread/conversation chain |
+| `get_article` | Get full article/long-form post content |
 | `get_replies` | Get replies to a tweet (supports `count`, `cursor`) |
 | `get_user` | Get user profile by handle |
 | `get_user_about` | Get detailed user info (bio, stats, links) |

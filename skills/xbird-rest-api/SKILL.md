@@ -1,11 +1,11 @@
 ---
 name: xbird-rest-api
-description: "Use when building backend services, autonomous agents, or programmatic integrations that need Twitter/X data via HTTP. Triggers: REST API, x402, USDC payment, BYOA credentials, encrypted credentials, per-request headers, Base mainnet, micropayment."
+description: "Use when building backend services, autonomous agents, or programmatic integrations that need Twitter/X data via HTTP. Triggers: REST API, x402, USDC payment, stateless token, encrypted credentials, per-request headers, Base mainnet, micropayment."
 ---
 
 # xbird REST API — Twitter/X with x402 Micropayments
 
-Pay-per-request Twitter/X API. Every call is metered via x402 (USDC on Base). Bring your own Twitter account (BYOA) — the server never stores plaintext credentials.
+Pay-per-request Twitter/X API. Every call is metered via x402 (USDC on Base). Fully stateless — the server stores nothing. No database, no stored credentials.
 
 ## When to Use
 
@@ -19,15 +19,21 @@ Pay-per-request Twitter/X API. Every call is metered via x402 (USDC on Base). Br
 ## Setup
 
 ```bash
-bun add @x402/fetch @x402/evm viem
+# 1. Install xbird and generate a stateless token
+npx @checkra1n/xbird login
+
+# 2. Fund the wallet shown in login output with USDC on Base
 ```
 
-```bash
-# .env — Bun auto-loads this, no dotenv needed
-PRIVATE_KEY=0x...          # Wallet private key for x402 payment signing
-TWITTER_AUTH_TOKEN=...     # From x.com cookies (auth_token)
-TWITTER_CT0=...            # From x.com cookies (ct0)
-```
+The `login` command auto-detects your browser cookies, encrypts them into a self-contained stateless token locally, and saves it. Nothing is sent to the server.
+
+## Authentication
+
+**Mode 1 — Stateless token** (recommended): run `xbird login` to generate a token, then pass it via `X-Encryption-Key` header. The token is self-contained — the server decrypts per-request and stores nothing.
+
+**Mode 2 — Per-request headers** (simplest): pass `X-Twitter-Auth-Token` + `X-Twitter-CT0` on every request.
+
+## Complete Example
 
 ```typescript
 import { wrapFetchWithPayment, x402Client } from "@x402/fetch";
@@ -38,28 +44,15 @@ const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`);
 const client = new x402Client();
 registerExactEvmScheme(client, { signer: account });
 const paymentFetch = wrapFetchWithPayment(fetch, client);
-```
 
-`paymentFetch` is a drop-in `fetch` replacement that auto-handles x402 payment challenges.
-
-## Authentication (BYOA)
-
-**Mode 1 — Per-request headers** (simplest): pass `X-Twitter-Auth-Token` + `X-Twitter-CT0` on every request.
-
-**Mode 2 — Encrypted credentials** (production): register once via `POST /api/accounts` with an encryption key, then send only `X-Encryption-Key` header. See `x402-flow.md` for detailed steps.
-
-## Complete Example
-
-```typescript
 const SERVER = "https://xbirdapi.up.railway.app";
 
-// Search with per-request headers
+// Search with stateless token
 const res = await paymentFetch(
   `${SERVER}/api/search?q=${encodeURIComponent("AI agents")}&count=10`,
   {
     headers: {
-      "X-Twitter-Auth-Token": process.env.TWITTER_AUTH_TOKEN!,
-      "X-Twitter-CT0": process.env.TWITTER_CT0!,
+      "X-Encryption-Key": process.env.XBIRD_TOKEN!,  // from xbird login
     },
   },
 );
@@ -86,6 +79,6 @@ Full endpoint list: see `endpoints.md`. Payment flow details: see `x402-flow.md`
 | Payment error "invalid_payload" | Wallet address == server payTo. EIP-3009 rejects self-payment. Use a different wallet. |
 | Using handle for bulk endpoints | `/api/users/:id/tweets` needs numeric ID. Call `GET /api/users/:handle` first. |
 | Empty USDC balance | Fund wallet with USDC on Base mainnet (`eip155:8453`). $0.10 = hundreds of calls. |
-| Sending only one credential header | Both `X-Twitter-Auth-Token` AND `X-Twitter-CT0` required, or use `X-Encryption-Key`. |
-| Wrong encryption key on request | Must match the key used during `POST /api/accounts` registration exactly. |
+| Sending only one credential header | Both `X-Twitter-Auth-Token` AND `X-Twitter-CT0` required, or use `X-Encryption-Key` with stateless token. |
+| Invalid token format | Token must be `xbird_sk_<key>.<ciphertext>.<iv>`. Re-run `npx @checkra1n/xbird login` to generate. |
 | Rate limit 429 | Twitter rate limit. Wait 1-2 minutes, retry. |

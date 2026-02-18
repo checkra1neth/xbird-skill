@@ -1,15 +1,15 @@
 # xbird — Twitter/X for AI Agents
 
-[![Website](https://img.shields.io/badge/xbird.dev-website-white)](https://xb1rd.vercel.app)
+[![Website](https://img.shields.io/badge/xbird.dev-website-white)](https://xbird.dev)
 [![npm](https://img.shields.io/npm/v/@checkra1n/xbird)](https://www.npmjs.com/package/@checkra1n/xbird)
 [![smithery badge](https://smithery.ai/badge/checkra1neth/xbirdmcp)](https://smithery.ai/server/checkra1neth/xbirdmcp)
 [![smithery skill](https://img.shields.io/badge/Smithery-skill-purple)](https://smithery.ai/skills/checkra1neth/xbird)
 [![skills.sh](https://img.shields.io/badge/skills.sh-xbird-blue)](https://skills.sh/checkra1neth/xbird-skill)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Agent skills that give AI agents **34 Twitter/X tools** — reading, searching, posting, engagement, media upload — across 3 integration protocols.
+Agent skills that give AI agents **35 Twitter/X tools** — reading, searching, posting, engagement, media upload — across 3 integration protocols.
 
-No Twitter developer account. No API keys. No OAuth.
+**Zero config** — auto-detects your browser session and generates a wallet. No Twitter developer account, no API keys, no OAuth.
 
 ## Skills
 
@@ -49,39 +49,22 @@ npx skills add checkra1neth/xbird-skill
 ### MCP Server Only
 
 ```bash
-bunx @checkra1n/xbird
+claude mcp add xbird -- npx @checkra1n/xbird
 ```
 
-## Setup
+That's it. xbird auto-detects your Twitter session from Chrome, Firefox, Edge, or Safari. A payment wallet is generated automatically on first run.
 
-### 1. Get Twitter Cookies
+### CLI
 
-1. Open [x.com](https://x.com) in your browser
-2. DevTools → Application → Cookies → `https://x.com`
-3. Copy `auth_token` and `ct0` values
+```bash
+# Login (generate stateless token for REST API)
+npx @checkra1n/xbird login
 
-### 2. Get a Wallet
+# Check authenticated user
+npx @checkra1n/xbird whoami
 
-You need a wallet with USDC on Base for micropayments. Export the private key.
-
-### 3. Configure MCP
-
-Add to `~/.claude.json` (Claude Code) or MCP settings (Cursor/Windsurf):
-
-```json
-{
-  "mcpServers": {
-    "xbird": {
-      "command": "bunx",
-      "args": ["@checkra1n/xbird"],
-      "env": {
-        "XBIRD_AUTH_TOKEN": "your_auth_token",
-        "XBIRD_CT0": "your_ct0",
-        "XBIRD_PRIVATE_KEY": "0x_your_wallet_private_key"
-      }
-    }
-  }
-}
+# Post a tweet
+npx @checkra1n/xbird tweet "Hello from xbird!"
 ```
 
 ## How It Works
@@ -92,23 +75,25 @@ Add to `~/.claude.json` (Claude Code) or MCP settings (Cursor/Windsurf):
 AI Agent (Claude Code / Cursor / Windsurf)
   |  MCP stdio
 @checkra1n/xbird (local process)
-  |-- Pay x402 --> xbird server (payment gateway)
-  '-- Execute --> Twitter API (your local IP)
+  |-- Auto-detect Twitter cookies from browser
+  |-- Pay x402 --> xbird server (payment only)
+  '-- Execute --> Twitter API (your residential IP)
 ```
 
 The xbird server only verifies payments. All Twitter API calls happen locally from your machine.
 
-### REST API (x402)
+### REST API (Stateless)
 
 ```
 Your Backend / Agent
-  |-- GET /api/search?q=bitcoin  -->  xbird server
-  |<-- 402 Payment Required      <--  (challenge)
-  |-- x-payment header (signed)  -->  (auto via @x402/fetch)
-  |<-- 200 { data, cursor }      <--  (result)
+  |-- npx @checkra1n/xbird login  -->  generates stateless token locally
+  |-- GET /api/search + token     -->  xbird server
+  |<-- 402 Payment Required       <--  (challenge)
+  |-- x-payment header (signed)   -->  (auto via @x402/fetch)
+  |<-- 200 { data, cursor }       <--  (result)
 ```
 
-Pay-per-request via x402 micropayments (USDC on Base). Credentials sent per-request or registered with AES-256-GCM encryption at rest.
+Fully stateless server — no database, no stored credentials. The token is self-contained (`xbird_sk_<key>.<ciphertext>.<iv>`), decrypted per-request then discarded.
 
 ### ACP (Virtuals Protocol)
 
@@ -152,8 +137,8 @@ Example agent session — 9 API calls:
 
 | Protocol | Credential Protection |
 |----------|----------------------|
-| **MCP** | Local environment variables, never leave your machine |
-| **REST x402** | Per-request headers or AES-256-GCM encrypted at rest |
+| **MCP** | Auto-detected from browser, never leave your machine |
+| **REST x402** | Fully stateless — encrypted in self-contained token, server stores nothing |
 | **ACP** | ECDH P-256 + AES-256-GCM end-to-end encryption (relay-blind) |
 
 ## Skill Structure
@@ -164,11 +149,11 @@ Each skill follows [Anthropic's best practices](https://docs.anthropic.com/en/do
 skills/
 ├── xbird/                   # MCP (local tools)
 │   ├── SKILL.md             # Setup + workflows + common mistakes
-│   └── tools.md             # 34 MCP tools reference
+│   └── tools.md             # 35 MCP tools reference
 ├── xbird-rest-api/          # REST API + x402 micropayments
 │   ├── SKILL.md             # Setup + auth + example + common mistakes
 │   ├── endpoints.md         # Full endpoint tables with pricing
-│   └── x402-flow.md         # Payment flow + encrypted credentials
+│   └── x402-flow.md         # Payment flow + stateless token
 └── xbird-acp/               # ACP (Virtuals marketplace)
     ├── SKILL.md             # Setup + example + common mistakes
     ├── encryption-flow.md   # ECDH P-256 + AES-256-GCM details
@@ -196,7 +181,7 @@ skills/
 | **Smithery MCP** | [`@checkra1neth/xbirdmcp`](https://smithery.ai/server/checkra1neth/xbirdmcp) |
 | **Smithery Skill** | [`checkra1neth/xbird`](https://smithery.ai/skills/checkra1neth/xbird) |
 | **SkillsMP** | [skillsmp.com](https://skillsmp.com/) |
-| **Website** | [xbird.dev](https://xb1rd.vercel.app) |
+| **Website** | [xbird.dev](https://xbird.dev) |
 
 ## License
 

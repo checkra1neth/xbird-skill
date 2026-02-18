@@ -2,13 +2,12 @@
 
 Server: `https://xbirdapi.up.railway.app`
 
-## Account Management — $0.001/call
+## Account — $0.001/call
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `POST` | `/api/accounts` | Register encrypted credentials |
-| `GET` | `/api/accounts` | Check registration status |
-| `DELETE` | `/api/accounts` | Remove registration |
+| `POST` | `/api/accounts` | Generate stateless token (server returns encrypted token, stores nothing) |
+| `GET` | `/api/me` | Get authenticated user info |
 
 ## Read — $0.001/call
 

@@ -37,47 +37,39 @@ Agent                          xbird Server                     Facilitator
 
 All of this is transparent when using `wrapFetchWithPayment` — it handles steps 2-4 automatically.
 
-## Encrypted Credentials (Mode 2)
+## Stateless Token Flow
 
-Register credentials once, then only send the encryption key on each request. The server encrypts at rest with AES-256-GCM.
+The server is fully stateless — no database, no stored credentials. Credentials are encrypted into a self-contained token.
 
-### Step 1 — Generate a 32-byte encryption key
+### Option A — Use `xbird login` (recommended)
 
-```typescript
-// Derive from wallet private key via HKDF (recommended)
-import { hkdf } from "@noble/hashes/hkdf";
-import { sha256 } from "@noble/hashes/sha256";
-
-const keyBytes = hkdf(sha256, Buffer.from(PRIVATE_KEY.slice(2), "hex"), "xbird-encryption", "xbird-cred-key", 32);
-const encryptionKey = Buffer.from(keyBytes).toString("hex"); // 64 hex chars
-
-// Or generate a random key
-const encryptionKey = Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString("hex");
+```bash
+npx @checkra1n/xbird login
+# Auto-detects browser cookies, encrypts locally, outputs token
+# Token format: xbird_sk_<key_hex>.<ciphertext_b64>.<iv_b64>
 ```
 
-### Step 2 — Register
-
-```typescript
-const res = await paymentFetch(`${SERVER}/api/accounts`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    authToken: process.env.TWITTER_AUTH_TOKEN,
-    ct0: process.env.TWITTER_CT0,
-    encryptionKey,  // 64 hex chars or 44 base64 chars (32 bytes)
-  }),
-});
-// Response: { registered: true, encrypted: true, username: "yourhandle" }
-```
-
-### Step 3 — Use with encryption key header
+Then pass the token on every request:
 
 ```typescript
 const res = await paymentFetch(`${SERVER}/api/search?q=bitcoin&count=10`, {
   headers: {
-    "X-Encryption-Key": encryptionKey,
+    "X-Encryption-Key": process.env.XBIRD_TOKEN!,  // xbird_sk_...
   },
 });
 ```
 
-The server maps your wallet address (from the x402 payment) to your registered credentials, decrypts them with the provided key, and executes the Twitter API call. A database breach yields only useless ciphertext.
+The server parses the token, decrypts credentials per-request with AES-256-GCM, executes the call, then discards everything. Zero server storage.
+
+### Option B — Per-request headers (no token needed)
+
+```typescript
+const res = await paymentFetch(`${SERVER}/api/search?q=bitcoin&count=10`, {
+  headers: {
+    "X-Twitter-Auth-Token": process.env.TWITTER_AUTH_TOKEN!,
+    "X-Twitter-CT0": process.env.TWITTER_CT0!,
+  },
+});
+```
+
+Credentials are sent in plaintext headers on each request. Simpler but less secure for production.
