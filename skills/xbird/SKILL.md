@@ -6,7 +6,7 @@ argument-hint: "[action or query]"
 
 # xbird — Twitter/X for AI Agents
 
-35 MCP tools for Twitter/X with x402 micropayments. Runs locally from residential IP.
+35 MCP tools for Twitter/X with x402 micropayments. Pure Node.js — no Bun required.
 
 **Zero config** — auto-detects your browser session and generates a wallet. No API keys, no developer account.
 
@@ -14,7 +14,7 @@ argument-hint: "[action or query]"
 
 - Running inside Claude Code, Cursor, or Windsurf
 - Need direct MCP tool access to Twitter/X
-- Local execution from your own IP
+- Works with Node.js >= 18 — no Bun required
 
 **Don't use when:** Building backend services or autonomous agents (use REST x402 instead), or operating on Virtuals marketplace (use ACP instead).
 
