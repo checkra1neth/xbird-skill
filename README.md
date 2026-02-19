@@ -9,7 +9,7 @@
 
 Agent skills that give AI agents **35 Twitter/X tools** — reading, searching, posting, engagement, media upload — across 3 integration protocols.
 
-**Zero config** — auto-detects your browser session and generates a wallet. No Twitter developer account, no API keys, no OAuth.
+No Twitter developer account, no API keys, no OAuth. Just log in to x.com and provide your cookies.
 
 ## Skills
 
@@ -52,7 +52,15 @@ npx skills add checkra1neth/xbird-skill
 claude mcp add xbird -- npx @checkra1n/xbird
 ```
 
-That's it. xbird auto-detects your Twitter session from Chrome, Firefox, Edge, or Safari. A payment wallet is generated automatically on first run.
+Then add your Twitter credentials:
+
+```bash
+npx @checkra1n/xbird login
+```
+
+Paste `auth_token` and `ct0` from x.com DevTools (Application → Cookies). A payment wallet is generated automatically on first run.
+
+> **Note:** Browser cookie auto-detection only works with [Bun](https://bun.sh). With `npx` (Node.js), always use the login command or env vars.
 
 ### CLI
 

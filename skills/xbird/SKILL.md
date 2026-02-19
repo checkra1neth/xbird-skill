@@ -20,11 +20,22 @@ argument-hint: "[action or query]"
 
 ## Setup
 
+**1. Install MCP server:**
 ```bash
 claude mcp add xbird -- npx @checkra1n/xbird
 ```
 
-That's it. xbird auto-detects your Twitter session from Chrome, Firefox, Edge, or Safari. A payment wallet is generated automatically on first run.
+**2. Add Twitter credentials:**
+```bash
+npx @checkra1n/xbird login
+```
+Paste `auth_token` and `ct0` from x.com (DevTools → Application → Cookies → `https://x.com`). Saved to `~/.config/xbird/config.json`.
+
+**3. Restart** your editor (reconnect MCP).
+
+A payment wallet is generated automatically on first run.
+
+> Browser cookie auto-detection only works with Bun. With npx (Node.js), always use the login command or env vars.
 
 Full tool list: see `tools.md`.
 
@@ -55,4 +66,4 @@ Pricing:    Read $0.001 | Search $0.005 | Bulk/Write $0.01 | Media $0.05
 | Posting thread with 1 tweet | `post_thread` requires minimum 2 tweets. Use `post_tweet` for single tweet. |
 | Media not attached | Upload returns `mediaId` — must pass it in `mediaIds` array to `post_tweet`. |
 | Rate limit error | Twitter rate limit. Wait 1-2 minutes, retry. |
-| Cookies not detected | Login to x.com in any browser. xbird auto-detects Chrome, Firefox, Edge, Safari. |
+| Cookies not detected | Run `npx @checkra1n/xbird login` and paste cookies manually. Auto-detect only works with Bun, not npx. |
