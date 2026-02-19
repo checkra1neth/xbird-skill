@@ -57,14 +57,8 @@ That's it. xbird auto-detects your Twitter session from Chrome, Firefox, Edge, o
 ### CLI
 
 ```bash
-# Login (generate stateless token for REST API)
+# Save Twitter credentials locally
 npx @checkra1n/xbird login
-
-# Check authenticated user
-npx @checkra1n/xbird whoami
-
-# Post a tweet
-npx @checkra1n/xbird tweet "Hello from xbird!"
 ```
 
 ## How It Works
