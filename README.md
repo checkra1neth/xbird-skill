@@ -9,7 +9,7 @@
 
 Agent skills that give AI agents **35 Twitter/X tools** — reading, searching, posting, engagement, media upload — across 3 integration protocols.
 
-No Twitter developer account, no API keys, no OAuth. Just log in to x.com and provide your cookies.
+No Twitter developer account, no API keys, no OAuth.
 
 ## Skills
 
@@ -48,19 +48,24 @@ npx skills add checkra1neth/xbird-skill
 
 ### MCP Server Only
 
+**Bun (recommended)** — auto-detects browser cookies:
+```bash
+claude mcp add xbird -- bunx @checkra1n/xbird
+```
+
+**Node.js** — requires one-time login:
 ```bash
 claude mcp add xbird -- npx @checkra1n/xbird
+npx @checkra1n/xbird login  # paste auth_token + ct0 from x.com DevTools
 ```
 
-Then add your Twitter credentials:
+A payment wallet is generated automatically on first run.
 
-```bash
-npx @checkra1n/xbird login
-```
-
-Paste `auth_token` and `ct0` from x.com DevTools (Application → Cookies). A payment wallet is generated automatically on first run.
-
-> **Note:** Browser cookie auto-detection only works with [Bun](https://bun.sh). With `npx` (Node.js), always use the login command or env vars.
+| | Bun (`bunx`) | Node.js (`npx`) |
+|--|---|---|
+| **Browser cookies** | Auto-detected | Manual login required |
+| **Setup** | Install Bun, done | One-time `login` command |
+| **Startup** | Faster | Slower (npm registry check) |
 
 ### CLI
 

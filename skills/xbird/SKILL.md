@@ -20,22 +20,21 @@ argument-hint: "[action or query]"
 
 ## Setup
 
-**1. Install MCP server:**
+Two runtime options:
+
+### Bun (recommended) — zero config
+```bash
+claude mcp add xbird -- bunx @checkra1n/xbird
+```
+Auto-detects cookies from Chrome, Firefox, Edge, Safari. Just log in to x.com — done.
+
+### Node.js — one-time login
 ```bash
 claude mcp add xbird -- npx @checkra1n/xbird
+npx @checkra1n/xbird login  # paste auth_token + ct0 from x.com DevTools
 ```
-
-**2. Add Twitter credentials:**
-```bash
-npx @checkra1n/xbird login
-```
-Paste `auth_token` and `ct0` from x.com (DevTools → Application → Cookies → `https://x.com`). Saved to `~/.config/xbird/config.json`.
-
-**3. Restart** your editor (reconnect MCP).
 
 A payment wallet is generated automatically on first run.
-
-> Browser cookie auto-detection only works with Bun. With npx (Node.js), always use the login command or env vars.
 
 Full tool list: see `tools.md`.
 
