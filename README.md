@@ -193,3 +193,8 @@ skills/
 ## License
 
 MIT
+
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/checkra1neth-xbird).
+
