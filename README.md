@@ -32,6 +32,9 @@ Operating on Virtuals Protocol marketplace?
   → xbird-acp (E2E encrypted credentials, ECDH + AES-256-GCM)
 ```
 
+## Related Hermes Agent Option
+
+If your agent stack is Hermes-first, [Hermes Tweet](https://github.com/Xquik-dev/hermes-tweet) can cover X/Twitter read and explore workflows inside Hermes while xbird remains the local MCP and skill route described here. The projects can be used side by side when a team wants both Hermes-native discovery and xbird's broader Twitter/X tool surface.
 ## Quick Install
 
 ### Claude Code Plugin
