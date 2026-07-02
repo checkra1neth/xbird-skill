@@ -7,7 +7,7 @@
 [![skills.sh](https://img.shields.io/badge/skills.sh-xbird-blue)](https://skills.sh/checkra1neth/xbird-skill)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Agent skills that give AI agents **35 Twitter/X tools** — reading, searching, posting, engagement, media upload — across 3 integration protocols.
+Agent skills that give AI agents **247 Twitter/X tools** — reading, searching, posting, engagement, media upload — across 3 integration protocols.
 
 No Twitter developer account, no API keys, no OAuth.
 
@@ -116,29 +116,33 @@ End-to-end encrypted credentials (ECDH P-256 + AES-256-GCM). The Virtuals relay 
 
 ## Pricing
 
-| Tier | Price | Examples |
-|------|-------|---------|
-| Read | $0.001 | `get_tweet`, `get_user`, `get_home_timeline` |
-| Search | $0.005 | `search_tweets`, `get_mentions` |
-| Bulk/Write | $0.01 | `get_user_tweets`, `post_tweet`, `like_tweet` |
-| Media | $0.05 | `upload_media` |
+Resource catalog billing (~2× cheaper than X API pay-per-use per unit):
+
+| Resource | Rate/unit | Count-aware | Examples |
+|----------|-----------|-------------|----------|
+| `post_read` | $0.0025 | yes (default 20, max 100) | `get_tweet`, `search_tweets`, `get_replies` |
+| `user_read` | $0.005 | yes | `get_user`, `get_followers` |
+| `owned_read` | $0.001 | yes | `get_bookmarks`, `get_home_timeline` |
+| `post_create` | $0.0075 | no | `post_tweet`, `reply_to_tweet` |
+| `interaction_create` | $0.0075 | no | `like_tweet`, `follow_user` |
+| `content_create` | $0.005 | no | `upload_media` |
 
 ### Comparison with X API
 
-Example agent session — 9 API calls:
+Example session (9 calls, `count=20` on search/lists):
 
 | Call | xbird | X API |
 |------|-------|-------|
-| `search_tweets` | $0.005 | $0.100 |
-| `get_tweet` ×3 | $0.003 | $0.015 |
-| `get_user` | $0.001 | $0.010 |
-| `get_replies` | $0.001 | $0.100 |
-| `post_tweet` | $0.010 | $0.010 |
-| `like_tweet` | $0.010 | $0.015 |
-| `upload_media` | $0.050 | $0.010 |
-| **Total** | **$0.080** | **$0.260** |
+| `search_tweets` count=20 | $0.05 | $0.10 |
+| `get_tweet` ×3 | $0.0075 | $0.015 |
+| `get_user` | $0.005 | $0.010 |
+| `get_replies` count=20 | $0.05 | $0.10 |
+| `post_tweet` | $0.0075 | $0.015 |
+| `like_tweet` | $0.0075 | $0.015 |
+| `upload_media` | $0.005 | $0.015 |
+| **Total** | **~$0.13** | **~$0.26** |
 
-**3.2x cheaper.** X API charges per resource fetched — a search returning 20 tweets costs 20x the per-tweet price. xbird charges a flat fee per call.
+Both bill per resource unit — xbird unit rates are ~2× lower.
 
 ## Security
 
@@ -156,7 +160,7 @@ Each skill follows [Anthropic's best practices](https://docs.anthropic.com/en/do
 skills/
 ├── xbird/                   # MCP (local tools)
 │   ├── SKILL.md             # Setup + workflows + common mistakes
-│   └── tools.md             # 35 MCP tools reference
+│   └── tools.md             # 247 MCP tools reference
 ├── xbird-rest-api/          # REST API + x402 micropayments
 │   ├── SKILL.md             # Setup + auth + example + common mistakes
 │   ├── endpoints.md         # Full endpoint tables with pricing

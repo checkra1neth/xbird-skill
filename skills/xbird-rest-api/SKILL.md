@@ -67,7 +67,9 @@ Response: { data: {...} } or { data: [...], cursor: "..." }
 Error:    { error: "message" }
 Undo:     POST to engage, DELETE to undo (like, retweet, bookmark)
 Bulk:     Resolve handle → numeric ID via GET /api/users/:handle first
-Pricing:  Read $0.001 | Search $0.005 | Bulk/Write $0.01 | Media $0.05
+Pricing:  post_read $0.0025/unit | user_read $0.005/unit | owned_read $0.001/unit
+          post_create $0.0075 | interaction_create $0.0075 | content_create $0.005
+          Count-aware routes bill resource × count (default 20, max 100)
 ```
 
 Full endpoint list: see `endpoints.md`. Payment flow details: see `x402-flow.md`.

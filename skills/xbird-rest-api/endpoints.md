@@ -2,14 +2,16 @@
 
 Server: `https://xbirdapi.up.railway.app`
 
-## Account — $0.001/call
+Billing: **resource rate × count** (count default 20, max 100 on list/search). HTTP 402 amount matches request.
+
+## Account — owned_read ($0.001/unit)
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `POST` | `/api/accounts` | Generate stateless token (server returns encrypted token, stores nothing) |
 | `GET` | `/api/me` | Get authenticated user info |
 
-## Read — $0.001/call
+## Read — post_read ($0.0025/unit) or user_read ($0.005/unit)
 
 | Method | Endpoint | Query Params | Description |
 |--------|----------|-------------|-------------|
@@ -23,7 +25,7 @@ Server: `https://xbirdapi.up.railway.app`
 | `GET` | `/api/lists` | — | Get owned + membership lists |
 | `GET` | `/api/lists/:id/tweets` | `count`, `cursor` | Get list timeline |
 
-## Search — $0.005/call
+## Search — post_read × count ($0.0025/unit)
 
 | Method | Endpoint | Query Params | Description |
 |--------|----------|-------------|-------------|
@@ -32,7 +34,7 @@ Server: `https://xbirdapi.up.railway.app`
 
 Search supports Twitter operators: `from:user`, `to:user`, `since:2024-01-01`, `filter:media`, `-filter:retweets`.
 
-## Bulk — $0.01/call
+## Bulk — user_read or post_read × count
 
 | Method | Endpoint | Query Params | Description |
 |--------|----------|-------------|-------------|
@@ -44,7 +46,7 @@ Search supports Twitter operators: `from:user`, `to:user`, `since:2024-01-01`, `
 
 Bulk endpoints require **numeric user ID**, not handle. Resolve via `GET /api/users/:handle` first.
 
-## Write — $0.01/call
+## Write — post_create or interaction_create ($0.0075)
 
 | Method | Endpoint | Body | Description |
 |--------|----------|------|-------------|
@@ -59,7 +61,7 @@ Bulk endpoints require **numeric user ID**, not handle. Resolve via `GET /api/us
 | `POST` | `/api/users/:handle/follow` | — | Follow a user |
 | `DELETE` | `/api/users/:handle/follow` | — | Unfollow a user |
 
-## Media — $0.05/call
+## Media — content_create ($0.005)
 
 | Method | Endpoint | Body | Description |
 |--------|----------|------|-------------|

@@ -1,12 +1,12 @@
 ---
 name: xbird
-description: "Use when the user asks to tweet, post threads, read tweets, search Twitter/X, check mentions, manage engagement (like/retweet/bookmark), update profile (bio, avatar, banner), upload media, or interact with Twitter accounts. Triggers: twitter, tweet, post, thread, timeline, mentions, followers, following, likes, retweet, bookmark, profile picture, bio."
+description: "Use when the user asks to tweet, post threads, read tweets, search Twitter/X, check mentions, manage engagement (like/retweet/bookmark), lists, communities, Grok, notifications, or update profile (bio, avatar, banner). Triggers: twitter, tweet, post, thread, timeline, mentions, followers, bookmark, Grok, Birdwatch."
 argument-hint: "[action or query]"
 ---
 
 # xbird — Twitter/X for AI Agents
 
-35 MCP tools for Twitter/X with x402 micropayments. Pure Node.js — no Bun required.
+247 MCP tools for Twitter/X with x402 micropayments. Pure Node.js — no Bun required.
 
 **Zero config** — auto-detects your browser session and generates a wallet. No API keys, no developer account.
 
@@ -52,9 +52,10 @@ Full tool list: see `tools.md`.
 
 ```
 Handles:    work with or without @ prefix
-Pagination: most tools accept cursor from previous response
+Pagination: most tools accept cursor; list/search use count (default 20, max 100)
 Media:      always upload first, then attach mediaId to tweet
-Pricing:    Read $0.001 | Search $0.005 | Bulk/Write $0.01 | Media $0.05
+Billing:    resource × count — post_read $0.0025 | user_read $0.005 | owned_read $0.001
+              post_create $0.0075 | interaction_create $0.0075 | content_create $0.005
 ```
 
 ## Common Mistakes

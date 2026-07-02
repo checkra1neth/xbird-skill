@@ -30,7 +30,7 @@ Agent                          xbird Server                     Facilitator
 ## Steps
 
 1. Agent sends request to endpoint
-2. Server returns HTTP 402 with `payment-required` header (base64 JSON containing amount, payTo address, network `eip155:8453`, scheme `exact`)
+2. Server returns HTTP 402 with `payment-required` header (base64 JSON containing amount = resource rate × count, payTo address, network `eip155:8453`, scheme `exact`)
 3. `@x402/fetch` automatically decodes the challenge, signs a USDC `transferWithAuthorization` (EIP-3009) using the wallet
 4. Agent retries the request with `x-payment` header containing the signed authorization
 5. Server verifies payment via the facilitator, executes the Twitter API call, settles the payment, and returns the result
