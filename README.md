@@ -1,4 +1,4 @@
-# xbird — Twitter/X for AI Agents
+# xbird - Twitter/X for AI Agents
 
 [![Website](https://img.shields.io/badge/xbird.dev-website-white)](https://xbird.dev)
 [![npm](https://img.shields.io/npm/v/@checkra1n/xbird)](https://www.npmjs.com/package/@checkra1n/xbird)
@@ -7,7 +7,7 @@
 [![skills.sh](https://img.shields.io/badge/skills.sh-xbird-blue)](https://skills.sh/checkra1neth/xbird-skill)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Agent skills that give AI agents **247 Twitter/X tools** — reading, searching, posting, engagement, media upload — across 3 integration protocols.
+Agent skills that give AI agents **247 Twitter/X tools** - reading, searching, posting, engagement, media upload - across 3 integration protocols.
 
 No Twitter developer account, no API keys, no OAuth.
 
@@ -15,7 +15,7 @@ No Twitter developer account, no API keys, no OAuth.
 
 | Skill | Protocol | Best For |
 |-------|----------|----------|
-| [**xbird**](./skills/xbird/) | MCP (stdio) | Claude Code, Cursor, Windsurf — local MCP tools |
+| [**xbird**](./skills/xbird/) | MCP (stdio) | Claude Code, Cursor, Windsurf - local MCP tools |
 | [**xbird-rest-api**](./skills/xbird-rest-api/) | REST + x402 | Backend services, autonomous agents, any HTTP client |
 | [**xbird-acp**](./skills/xbird-acp/) | ACP (Virtuals) | Agent-to-agent commerce on Virtuals Protocol marketplace |
 
@@ -31,6 +31,12 @@ Building a backend service or autonomous agent?
 Operating on Virtuals Protocol marketplace?
   → xbird-acp (E2E encrypted credentials, ECDH + AES-256-GCM)
 ```
+
+## Related Hermes Agent Option
+
+If your agent stack is Hermes-first, [Hermes Tweet](https://github.com/Xquik-dev/hermes-tweet) is a native Hermes Agent plugin for Xquik. It provides offline tool discovery plus read workflows and opt-in action workflows across 106 agent-callable X/Twitter endpoints. Install it with `hermes plugins install Xquik-dev/hermes-tweet --enable`. Use xbird for the local MCP and skill route documented here; both projects can run side by side.
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.
 
 ## Quick Install
 
@@ -48,14 +54,16 @@ npx skills add checkra1neth/xbird-skill
 
 ### MCP Server Only
 
-**Bun (recommended)** — auto-detects browser cookies:
+**Bun (recommended)** - auto-detects browser cookies:
 ```bash
-claude mcp add xbird -- bunx @checkra1n/xbird
+claude mcp add xbird \
+-- bunx @checkra1n/xbird
 ```
 
-**Node.js** — requires one-time login:
+**Node.js** - requires one-time login:
 ```bash
-claude mcp add xbird -- npx @checkra1n/xbird
+claude mcp add xbird \
+-- npx @checkra1n/xbird
 npx @checkra1n/xbird login  # paste auth_token + ct0 from x.com DevTools
 ```
 
@@ -100,7 +108,7 @@ Your Backend / Agent
   |<-- 200 { data, cursor }       <--  (result)
 ```
 
-Fully stateless server — no database, no stored credentials. The token is self-contained (`xbird_sk_<key>.<ciphertext>.<iv>`), decrypted per-request then discarded.
+Fully stateless server - no database, no stored credentials. The token is self-contained (`xbird_sk_<key>.<ciphertext>.<iv>`), decrypted per-request then discarded.
 
 ### ACP (Virtuals Protocol)
 
@@ -142,19 +150,19 @@ Example session (9 calls, `count=20` on search/lists):
 | `upload_media` | $0.005 | $0.015 |
 | **Total** | **~$0.13** | **~$0.26** |
 
-Both bill per resource unit — xbird unit rates are ~2× lower.
+Both bill per resource unit - xbird unit rates are ~2× lower.
 
 ## Security
 
 | Protocol | Credential Protection |
 |----------|----------------------|
 | **MCP** | Auto-detected from browser, never leave your machine |
-| **REST x402** | Fully stateless — encrypted in self-contained token, server stores nothing |
+| **REST x402** | Fully stateless - encrypted in self-contained token, server stores nothing |
 | **ACP** | ECDH P-256 + AES-256-GCM end-to-end encryption (relay-blind) |
 
 ## Skill Structure
 
-Each skill follows [Anthropic's best practices](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/tutorials#create-custom-slash-commands) — concise SKILL.md (<500 words) with heavy reference in separate files.
+Each skill follows the [Agent Skills specification](https://agentskills.io/specification) - concise SKILL.md (<500 words) with heavy reference in separate files.
 
 ```
 skills/
